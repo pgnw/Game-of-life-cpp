@@ -76,16 +76,6 @@ int main()
         {
             for (int j = 0; j < shapesHeight; j++)
             {
-                RectangleShape newCell = shape;
-
-                // Even is white, odd is black.
-                if (i + j % 2 == 1)
-                    newCell.setFillColor(Color::White);
-                else
-                    newCell.setFillColor(Color::Black);
-
-                shape.setPosition(Vector2f(i * 50, j * 50));
-
                 Text debugText;
                 debugText.setString("i = " + std::to_string(i) + " j = " + std::to_string(j));
 
@@ -93,15 +83,23 @@ int main()
                 debugText.setFont(font);
                 debugText.setFillColor(Color::Red);
 
-                debugText.setPosition(i *50, j *50);
+                debugText.setPosition(i * 50, j * 50);
 
-                window.draw(debugText);
+                RectangleShape newCell = shape;
+
+                // Even is white, odd is black.
+                if ((i + j) % 2 == 0)
+                    newCell.setFillColor(Color::White);
+                else
+                    newCell.setFillColor(Color::Black);
+
+                shape.setPosition(Vector2f(i * 50, j * 50));
 
                 // Draw it to the screen (might move this later).
-                //window.draw(newCell);
+                window.draw(debugText);
+                window.draw(newCell);
 
                 shapes[i][j] = newCell;
-
             }
         }
 
