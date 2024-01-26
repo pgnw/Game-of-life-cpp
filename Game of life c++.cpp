@@ -66,15 +66,15 @@ int main()
         shape2.setFillColor(Color::Black);
 
         // Get how many cells can fit into the screen.
-        int shapesWide = screenWidth / 50;
-        int shapesHeight = screenHeight / 50;
+        int numCellsWide = screenWidth / 50;
+        int numCellsHigh = screenHeight / 50;
 
-        std::vector<std::vector<sf::RectangleShape>> shapes(shapesWide, std::vector<sf::RectangleShape>(shapesHeight));
+        std::vector<std::vector<sf::RectangleShape>> shapes(numCellsWide, std::vector<sf::RectangleShape>(numCellsHigh));
 
 
-        for (int i = 0; i < shapesWide; i++)
+        for (int i = 0; i < numCellsWide; i++)
         {
-            for (int j = 0; j < shapesHeight; j++)
+            for (int j = 0; j < numCellsHigh; j++)
             {
                 Text debugText;
                 debugText.setString("i = " + std::to_string(i) + " j = " + std::to_string(j));
