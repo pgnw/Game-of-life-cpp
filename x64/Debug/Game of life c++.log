@@ -1,3 +1,28 @@
-﻿  Cell.cpp
-B:\Things\Game of life C++\Game of life c++\Cell.cpp(7,12): error C2011: 'Cell': 'class' type redefinition
-B:\Things\Game of life C++\Game of life c++\Cell.h(2): message : see declaration of 'Cell'
+﻿  Game of life c++.cpp
+B:\Things\Game of life C++\Game of life c++\Game of life c++.cpp(17,47): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+B:\Things\Game of life C++\Game of life c++\Game of life c++.cpp(17,39): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+B:\Things\Game of life C++\Game of life c++\Game of life c++.cpp(20,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+B:\Things\Game of life C++\Game of life c++\Game of life c++.cpp(20,27): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+B:\Things\Game of life C++\Game of life c++\Game of life c++.cpp(129,49): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+B:\Things\Game of life C++\Game of life c++\Game of life c++.cpp(129,41): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+B:\Things\Game of life C++\Game of life c++\Game of life c++.cpp(139,54): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+B:\Things\Game of life C++\Game of life c++\Game of life c++.cpp(139,46): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+          with
+          [
+              T=float
+          ]
+  Game of life c++.vcxproj -> B:\Things\Game of life C++\Game of life c++\x64\Debug\Game of life c++.exe
+  'pwsh.exe' is not recognized as an internal or external command,
+  operable program or batch file.
