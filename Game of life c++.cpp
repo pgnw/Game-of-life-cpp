@@ -5,16 +5,29 @@
 #include <random>
 using namespace sf;
 
+
 class Cell {
 
 public:
 
-    Cell(int xLoc, int yLoc, int height, int width)
+    int LocationX;
+    int LocationY;
+
+    bool Alive;
+
+    RectangleShape shape;
+
+    // Added this default constructor to stop the compiler from complaining, shouldn't be used.
+    Cell() : LocationX(0), LocationY(0), Alive(false), shape(Vector2f(99999, 99999)) {
+        shape.setFillColor(Color::Red);
+    }
+
+    Cell(int xLoc, int yLoc, int cellHeight, int cellWidth)
     {
         LocationX = xLoc;
         LocationY = yLoc;
 
-        RectangleShape shape(Vector2f(height, width));
+        RectangleShape shape(Vector2f(cellHeight, cellWidth));
 
 
         shape.setPosition(xLoc, yLoc);
@@ -36,13 +49,6 @@ public:
 
     }
 
-    int LocationX;
-    int LocationY;
-
-    bool Alive;
-
-private:
-    RectangleShape shape;
 
 
 };
@@ -105,44 +111,37 @@ int main()
 
         RectangleShape shape2 = shape;
         
+
         shape.setFillColor(Color::White);
         shape2.setFillColor(Color::Black);
 
+        // cellHeight and cellWidth for the cells.
+        int cellHeight = 50;
+        int cellWidth = 50;
+
         // Get how many cells can fit into the screen.
-        int numCellsWide = screenWidth / 50;
-        int numCellsHigh = screenHeight / 50;
+        int numCellsWide = screenWidth / cellHeight;
+        int numCellsHigh = screenHeight / cellWidth;
 
-        std::vector<std::vector<sf::RectangleShape>> shapes(numCellsWide, std::vector<sf::RectangleShape>(numCellsHigh));
-
+        std::vector<std::vector<Cell>> Cells(numCellsWide, std::vector<Cell>(numCellsHigh));
 
         for (int i = 0; i < numCellsWide; i++)
         {
             for (int j = 0; j < numCellsHigh; j++)
             {
-                Text debugText;
-                debugText.setString("i = " + std::to_string(i) + " j = " + std::to_string(j));
 
-                debugText.setCharacterSize(10);
-                debugText.setFont(font);
-                debugText.setFillColor(Color::Red);
+                // Get the positions to place the cells.
+                int xPos = i * cellHeight;
+                int yPos = j * cellWidth;
 
-                debugText.setPosition(i * 50, j * 50);
+                
 
-                RectangleShape newCell = shape;
-
-                // Even is white, odd is black.
-                if ((i + j) % 2 == 0)
-                    newCell.setFillColor(Color::White);
-                else
-                    newCell.setFillColor(Color::Black);
-
-                shape.setPosition(Vector2f(i * 50, j * 50));
+                Cell newCell = Cell(xPos, yPos, cellHeight, cellWidth );
 
                 // Draw it to the screen (might move this later).
-                window.draw(debugText);
-                window.draw(newCell);
+                window.draw(newCell.shape);
 
-                shapes[i][j] = newCell;
+                Cells[i][j] = newCell;
             }
         }
 
@@ -160,3 +159,4 @@ int main()
 
     return 0;
 }
+
