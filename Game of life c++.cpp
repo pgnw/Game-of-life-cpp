@@ -63,11 +63,10 @@ void StartUp()
 
 }
 
-RenderWindow window;
+RenderWindow window(VideoMode(1000, 600, Style::Resize), "da window");
 
 int main()
 {
-    window = RenderWindow(VideoMode(1000, 600, Style::Resize), "da window");
 
     unsigned int screenWidth = VideoMode::getDesktopMode().width;
     unsigned int screenHeight = VideoMode::getDesktopMode().height;
