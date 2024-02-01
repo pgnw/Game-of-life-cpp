@@ -58,20 +58,65 @@ public:
 };
 
 
-void StartUp()
-{
-
-}
 
 RenderWindow window(VideoMode(1000, 600, Style::Resize), "da window");
 
+unsigned int screenWidth = VideoMode::getDesktopMode().width;
+unsigned int screenHeight = VideoMode::getDesktopMode().height;
+
+/// <summary>
+/// Performs configuration for the window.
+/// </summary>
+void ConfigSetup()
+{
+    window.setVerticalSyncEnabled(true);
+
+}
+
+//Default parameters for the generate cells function.
+void GenerateCells(int cellHeight = 50, int cellWidth = 50);
+
+/// <summary>
+/// Generates the cells for the simuation.
+/// </summary>
+void GenerateCells(int cellHeight, int cellWidth)
+{
+    window.clear(Color::Black);
+
+
+    // Get how many cells can fit into the screen.
+    int numCellsWide = screenWidth / cellHeight;
+    int numCellsHigh = screenHeight / cellWidth;
+
+    std::vector<std::vector<Cell>> Cells(numCellsWide, std::vector<Cell>(numCellsHigh));
+
+    for (int i = 0; i < numCellsWide; i++)
+    {
+        for (int j = 0; j < numCellsHigh; j++)
+        {
+
+            // Get the positions to place the cells.
+            int xPos = i * cellHeight;
+            int yPos = j * cellWidth;
+
+
+
+            Cell newCell = Cell(xPos, yPos, cellHeight, cellWidth);
+
+            // Draw it to the screen (might move this later).
+            window.draw(newCell.shape);
+
+            Cells[i][j] = newCell;
+        }
+    }
+
+    window.display();
+}
+
 int main()
 {
-
-    unsigned int screenWidth = VideoMode::getDesktopMode().width;
-    unsigned int screenHeight = VideoMode::getDesktopMode().height;
-
-    window.setVerticalSyncEnabled(true);
+    ConfigSetup();
+    GenerateCells();
 
     Event event;
 
@@ -116,54 +161,7 @@ int main()
 
         }
 
-        window.clear(Color::Black);
-        
-        RectangleShape shape(Vector2f(50.f, 50.f));
-
-        RectangleShape shape2 = shape;
-        
-
-        shape.setFillColor(Color::White);
-        shape2.setFillColor(Color::Black);
-
-        // cellHeight and cellWidth for the cells.
-        int cellHeight = 50;
-        int cellWidth = 50;
-
-        // Get how many cells can fit into the screen.
-        int numCellsWide = screenWidth / cellHeight;
-        int numCellsHigh = screenHeight / cellWidth;
-
-        std::vector<std::vector<Cell>> Cells(numCellsWide, std::vector<Cell>(numCellsHigh));
-
-        for (int i = 0; i < numCellsWide; i++)
-        {
-            for (int j = 0; j < numCellsHigh; j++)
-            {
-
-                // Get the positions to place the cells.
-                int xPos = i * cellHeight;
-                int yPos = j * cellWidth;
-
-                
-
-                Cell newCell = Cell(xPos, yPos, cellHeight, cellWidth );
-
-                // Draw it to the screen (might move this later).
-                window.draw(newCell.shape);
-
-                Cells[i][j] = newCell;
-            }
-        }
-
-
-
-
-
-        window.draw(shape2);
-        window.draw(shape);
-
-        window.display();
+        //window.display();
 
 
     }
