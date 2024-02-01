@@ -27,16 +27,20 @@ public:
         LocationX = xLoc;
         LocationY = yLoc;
 
-        RectangleShape shape(Vector2f(cellHeight, cellWidth));
+        shape = RectangleShape();
 
 
         shape.setPosition(xLoc, yLoc);
+
+        shape.setSize(Vector2f(cellHeight, cellWidth));
 
         std::random_device dev;
         std::mt19937 rng(dev());
         std::uniform_int_distribution<std::mt19937::result_type> randomNumber(1, 10);
 
-        if (randomNumber(rng) <= 2)
+        int randomNum = randomNumber(rng);
+
+        if (randomNum <= 5)
         {
             Alive = true;
             shape.setFillColor(Color::White);
@@ -53,9 +57,17 @@ public:
 
 };
 
+
+void StartUp()
+{
+
+}
+
+RenderWindow window;
+
 int main()
 {
-    RenderWindow window(VideoMode(1000, 600, Style::Resize), "da window");
+    window = RenderWindow(VideoMode(1000, 600, Style::Resize), "da window");
 
     unsigned int screenWidth = VideoMode::getDesktopMode().width;
     unsigned int screenHeight = VideoMode::getDesktopMode().height;
