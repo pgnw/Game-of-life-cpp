@@ -64,31 +64,33 @@ RenderWindow window(VideoMode(1000, 600, Style::Resize), "da window");
 unsigned int screenWidth = VideoMode::getDesktopMode().width;
 unsigned int screenHeight = VideoMode::getDesktopMode().height;
 
+int cellHeight;
+int cellWidth;
+
+// Get how many cells can fit into the screen.
+int numCellsWide = screenWidth / cellHeight;
+int numCellsHigh = screenHeight / cellWidth;
+
+std::vector<std::vector<Cell>> Cells(numCellsWide, std::vector<Cell>(numCellsHigh));
+
 /// <summary>
-/// Performs configuration for the window.
+/// Performs configuration for the window and the cells.
 /// </summary>
 void ConfigSetup()
 {
     window.setVerticalSyncEnabled(true);
 
+    cellHeight = 50;
+    cellWidth = 50;
 }
-
-//Default parameters for the generate cells function.
-void GenerateCells(int cellHeight = 50, int cellWidth = 50);
 
 /// <summary>
 /// Generates the cells for the simuation.
 /// </summary>
-void GenerateCells(int cellHeight, int cellWidth)
+void GenerateCells()
 {
+
     window.clear(Color::Black);
-
-
-    // Get how many cells can fit into the screen.
-    int numCellsWide = screenWidth / cellHeight;
-    int numCellsHigh = screenHeight / cellWidth;
-
-    std::vector<std::vector<Cell>> Cells(numCellsWide, std::vector<Cell>(numCellsHigh));
 
     for (int i = 0; i < numCellsWide; i++)
     {
@@ -111,6 +113,22 @@ void GenerateCells(int cellHeight, int cellWidth)
     }
 
     window.display();
+}
+
+void UpdateCells()
+{
+    // Iterate through each cell in the 2d vector and ...
+    for (int xIndex = 0; xIndex < numCellsWide; xIndex++)
+    {
+        for (int yIndex = 0; yIndex < numCellsHigh; yIndex++)
+        {
+            Cell currentCell = Cells[xIndex][yIndex];
+
+
+
+        }
+    }
+     
 }
 
 int main()
