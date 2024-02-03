@@ -64,14 +64,15 @@ RenderWindow window(VideoMode(1000, 600, Style::Resize), "da window");
 unsigned int screenWidth = VideoMode::getDesktopMode().width;
 unsigned int screenHeight = VideoMode::getDesktopMode().height;
 
+// Size of the cells in pixels
 int cellHeight;
 int cellWidth;
 
-// Get how many cells can fit into the screen.
-int numCellsWide = screenWidth / cellHeight;
-int numCellsHigh = screenHeight / cellWidth;
+// How many cells can fit into the screen.
+int numCellsWide;
+int numCellsHigh;
 
-std::vector<std::vector<Cell>> Cells(numCellsWide, std::vector<Cell>(numCellsHigh));
+std::vector<std::vector<Cell>> Cells;
 
 /// <summary>
 /// Performs configuration for the window and the cells.
@@ -80,8 +81,17 @@ void ConfigSetup()
 {
     window.setVerticalSyncEnabled(true);
 
+    // Set the size of the cells.
     cellHeight = 50;
     cellWidth = 50;
+
+    // Calculate how many cells can fit into the screen.
+    numCellsWide = screenWidth / cellHeight;
+    numCellsHigh = screenHeight / cellWidth;
+
+    // Create a vector to store the cells, with its capacity set to the amount of cells being simulated.
+
+    Cells = std::vector<std::vector<Cell>>(numCellsWide, std::vector<Cell>(numCellsHigh));
 }
 
 /// <summary>
