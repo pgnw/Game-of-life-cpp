@@ -132,13 +132,22 @@ void UpdateCells()
     {
         for (int yIndex = 0; yIndex < numCellsHigh; yIndex++)
         {
-            Cell currentCell = Cells[xIndex][yIndex];
 
 
 
         }
     }
      
+}
+
+/// <summary>
+/// Update the cell's life state and colour according to conway's game of life.
+/// </summary>
+void UpdateCell(int i, int j)
+{
+    Cell cell = Cells[i][j];
+    ///todo figure out logic here
+
 }
 
 int main()
