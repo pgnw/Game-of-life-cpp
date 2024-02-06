@@ -125,20 +125,6 @@ void GenerateCells()
     window.display();
 }
 
-void UpdateCells()
-{
-    // Iterate through each cell in the 2d vector and ...
-    for (int xIndex = 0; xIndex < numCellsWide; xIndex++)
-    {
-        for (int yIndex = 0; yIndex < numCellsHigh; yIndex++)
-        {
-
-
-
-        }
-    }
-     
-}
 
 /// <summary>
 /// Update the cell's life state and colour according to conway's game of life.
@@ -146,6 +132,11 @@ void UpdateCells()
 void UpdateCell(int i, int j)
 {
     Cell cell = Cells[i][j];
+
+    // TODO add onto this
+    int left = i - 1;
+    if (left < 0)
+        left = cellWidth;
 
     // Get the cells surrounding the current cell
     Cell leftCell = Cells[i - 1][j];
@@ -160,8 +151,22 @@ void UpdateCell(int i, int j)
 
 
     ///todo figure out logic here
-
 }
+void UpdateCells()
+{
+    // Iterate through each cell in the 2d vector and ...
+    for (int xIndex = 0; xIndex < numCellsWide; xIndex++)
+    {
+        for (int yIndex = 0; yIndex < numCellsHigh; yIndex++)
+        {
+
+            UpdateCell(xIndex, yIndex);
+
+        }
+    }
+     
+}
+
 
 int main()
 {
@@ -182,6 +187,7 @@ int main()
 
     while (window.isOpen())
     {
+        UpdateCells();
         // Check if the window has focus then, check if the space key was pressed.
         if (window.hasFocus())
             isSpacePressed = Keyboard::isKeyPressed(Keyboard::Space);
