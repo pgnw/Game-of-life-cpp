@@ -146,6 +146,19 @@ void UpdateCells()
 void UpdateCell(int i, int j)
 {
     Cell cell = Cells[i][j];
+
+    // Get the cells surrounding the current cell
+    Cell leftCell = Cells[i - 1][j];
+    Cell bottomLeftCell = Cells[i - 1][j - 1];
+    Cell bottomCell = Cells[i][j - 1];
+    Cell bottomRightCell = Cells[i + 1][j - 1];
+    Cell rightCell = Cells[i + 1][j];
+    Cell topRightCell = Cells[i + 1][j + 1];
+    Cell topCell = Cells[i][j + 1];
+    Cell topLeftCell = Cells[i - 1][j + 1];
+    // TODO figure out of to find the cells connected through the edges
+
+
     ///todo figure out logic here
 
 }
