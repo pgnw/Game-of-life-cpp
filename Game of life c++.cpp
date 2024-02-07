@@ -8,14 +8,18 @@ using namespace sf;
 
 class Cell {
 
+private:
+
+
+
+
 public:
 
     int LocationX;
     int LocationY;
 
-    bool Alive;
-
     RectangleShape shape;
+    bool Alive;
 
     // Added this default constructor to stop the compiler from complaining, shouldn't be used.
     Cell() : LocationX(0), LocationY(0), Alive(false), shape(Vector2f(99999, 99999)) {
@@ -53,7 +57,19 @@ public:
 
     }
 
-
+   void SetLife(bool life)
+   {
+        if (life)
+        {
+            shape.setFillColor(Color::White);
+            Alive = true;
+        }
+        else
+        {
+            shape.setFillColor(Color::Red);
+            Alive = false;
+        }
+   }
 
 };
 
@@ -125,32 +141,53 @@ void GenerateCells()
     window.display();
 }
 
+/// <summary>
+/// Returns how many living cells surround the cell passed in.
+/// </summary>
+int  HowManyLivingNeighbors(int x, int y)
+{
+    int aliveCount = 0;
+
+    // Determine the index of the cell to the left of the current one. If it goes beyond the left boundary, wrap around to the right side.
+    int leftCellIndex = (x - 1 < 0) ? numCellsWide -1 : x - 1;
+
+    // Same as the above for every other side.
+    int rightCellIndex = (x + 1 > numCellsWide -1) ? 0 : x  +1;
+    int upCellIndex = (y + 1 > numCellsHigh -1) ? 0 : y + 1;
+    int bottomCellIndex = (y - 1 < 0) ? numCellsHigh -1 : y - 1;
+
+    // Get the Cell classes from the indexs.
+    Cell topLeftCell = Cells[leftCellIndex][upCellIndex];
+    Cell topCell = Cells[x][upCellIndex];
+    Cell topRightCell = Cells[rightCellIndex][upCellIndex];
+    Cell rightCell = Cells[rightCellIndex][y];
+    Cell bottomRightCell = Cells[rightCellIndex][bottomCellIndex];
+    Cell botttomCell = Cells[x][bottomCellIndex];
+    Cell bottomLeftCell = Cells[leftCellIndex][bottomCellIndex];
+    Cell leftCell = Cells[leftCellIndex][y];
+
+
+
+    return aliveCount;
+}
+
 
 /// <summary>
 /// Update the cell's life state and colour according to conway's game of life.
 /// </summary>
-void UpdateCell(int i, int j)
+void UpdateCell(int x, int y)
 {
-    Cell cell = Cells[i][j];
+    // Retrieve the cell at the current position in the grid.
+    Cell cell = Cells[x][y];
 
-    // TODO add onto this
-    int left = i - 1;
-    if (left < 0)
-        left = cellWidth;
+    int aliveNeighbors = HowManyLivingNeighbors(x, y);
 
-    // Get the cells surrounding the current cell
-    Cell leftCell = Cells[i - 1][j];
-    Cell bottomLeftCell = Cells[i - 1][j - 1];
-    Cell bottomCell = Cells[i][j - 1];
-    Cell bottomRightCell = Cells[i + 1][j - 1];
-    Cell rightCell = Cells[i + 1][j];
-    Cell topRightCell = Cells[i + 1][j + 1];
-    Cell topCell = Cells[i][j + 1];
-    Cell topLeftCell = Cells[i - 1][j + 1];
-    // TODO figure out of to find the cells connected through the edges
+    if (aliveNeighbors > 3)
+    {
+        cell.SetLife(false);
+    }
 
-
-    ///todo figure out logic here
+    ///todo figure out logic here 
 }
 void UpdateCells()
 {

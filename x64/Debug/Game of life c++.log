@@ -1,12 +1,12 @@
 ﻿  Game of life c++.cpp
-A:\Repos\Game of life c++\Game of life c++.cpp(33,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-A:\Repos\Game of life c++\Game of life c++.cpp(33,27): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-A:\Repos\Game of life c++\Game of life c++.cpp(35,44): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+A:\Repos\Game of life c++\Game of life c++.cpp(37,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+A:\Repos\Game of life c++\Game of life c++.cpp(37,27): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+A:\Repos\Game of life c++\Game of life c++.cpp(39,44): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
           ]
-A:\Repos\Game of life c++\Game of life c++.cpp(35,32): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
+A:\Repos\Game of life c++\Game of life c++.cpp(39,32): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
           with
           [
               T=float
