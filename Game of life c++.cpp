@@ -3,6 +3,7 @@
 #include <SFML/Window.hpp>
 #include <iostream>
 #include <random>
+#include <chrono>
 using namespace sf;
 
 
@@ -222,9 +223,12 @@ int main()
         std::cout << ("error loading font");
     }
 
+    auto lastTick = std::chrono::steady_clock::now();
+
     while (window.isOpen())
     {
-        UpdateCells();
+
+
         // Check if the window has focus then, check if the space key was pressed.
         if (window.hasFocus())
             isSpacePressed = Keyboard::isKeyPressed(Keyboard::Space);
@@ -254,9 +258,24 @@ int main()
 
         }
 
-        //window.display();
+
+        // Only update the cells if 500 milliseconds have passed.
+        auto currentTime = std::chrono::steady_clock::now();
+
+        // Get the time difference in milliseconds.
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTick);
+
+        if (duration >= std::chrono::milliseconds(500))
+        {
+            UpdateCells();
+
+            // Update the last tick to now.
+            lastTick = std::chrono::steady_clock::now();
+        }
+        
 
 
+        window.display();
     }
 
     return 0;
