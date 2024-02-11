@@ -96,7 +96,8 @@ std::vector<std::vector<Cell>> Cells;
 /// </summary>
 void ConfigSetup()
 {
-    window.setVerticalSyncEnabled(true);
+    //window.setVerticalSyncEnabled(false);
+    window.setFramerateLimit(60);
 
     // Set the size of the cells.
     cellHeight = 50;
@@ -138,8 +139,6 @@ void GenerateCells()
             Cells[i][j] = newCell;
         }
     }
-
-    window.display();
 }
 
 /// <summary>
@@ -205,7 +204,21 @@ void UpdateCells()
      
 }
 
+void DrawShapes()
+{
+    //todo cdomment
+    for (int i = 0; i < numCellsWide; i++)
+    {
+        for (int j = 0; j < numCellsHigh; j++)
+        {
 
+            // Draw it to the screen
+            window.draw(Cells[i][j].shape);
+
+            
+        }
+    }
+}
 int main()
 {
     ConfigSetup();
@@ -228,7 +241,7 @@ int main()
     while (window.isOpen())
     {
 
-
+        
         // Check if the window has focus then, check if the space key was pressed.
         if (window.hasFocus())
             isSpacePressed = Keyboard::isKeyPressed(Keyboard::Space);
@@ -257,7 +270,7 @@ int main()
 
 
         }
-
+        
 
         // Only update the cells if 500 milliseconds have passed.
         auto currentTime = std::chrono::steady_clock::now();
@@ -267,15 +280,18 @@ int main()
 
         if (duration >= std::chrono::milliseconds(500))
         {
+            window.clear(Color::Red);
             UpdateCells();
+            DrawShapes();
+            window.display();
 
             // Update the last tick to now.
             lastTick = std::chrono::steady_clock::now();
         }
         
+        
 
 
-        window.display();
     }
 
     return 0;
