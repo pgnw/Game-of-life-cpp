@@ -45,7 +45,7 @@ public:
 
         int randomNum = randomNumber(rng);
 
-        if (randomNum <= 5)
+        if (randomNum <= 1)
         {
             Alive = true;
             shape.setFillColor(Color::White);
