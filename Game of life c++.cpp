@@ -45,7 +45,7 @@ public:
 
         int randomNum = randomNumber(rng);
 
-        if (randomNum <= 5)
+        if (randomNum <= 1)
         {
             Alive = true;
             shape.setFillColor(Color::White);
@@ -67,7 +67,7 @@ public:
         }
         else
         {
-            shape.setFillColor(Color::Red);
+            shape.setFillColor(Color::Black);
             Alive = false;
         }
    }
@@ -76,7 +76,7 @@ public:
 
 
 
-RenderWindow window(VideoMode(1000, 600, Style::Resize), "da window");
+RenderWindow window(VideoMode(1000, 600, Style::Resize), "Game window");
 
 unsigned int screenWidth = VideoMode::getDesktopMode().width;
 unsigned int screenHeight = VideoMode::getDesktopMode().height;
@@ -100,8 +100,8 @@ void ConfigSetup()
     window.setFramerateLimit(60);
 
     // Set the size of the cells.
-    cellHeight = 50;
-    cellWidth = 50;
+    cellHeight = 10;
+    cellWidth = 10;
 
     // Calculate how many cells can fit into the screen.
     numCellsWide = screenWidth / cellHeight;
@@ -128,7 +128,6 @@ void GenerateCells()
             // Get the positions to place the cells.
             int xPos = i * cellHeight;
             int yPos = j * cellWidth;
-
 
 
             Cell newCell = Cell(xPos, yPos, cellHeight, cellWidth);
@@ -162,10 +161,27 @@ int  HowManyLivingNeighbors(int x, int y)
     Cell topRightCell = Cells[rightCellIndex][upCellIndex];
     Cell rightCell = Cells[rightCellIndex][y];
     Cell bottomRightCell = Cells[rightCellIndex][bottomCellIndex];
-    Cell botttomCell = Cells[x][bottomCellIndex];
+    Cell bottomCell = Cells[x][bottomCellIndex];
     Cell bottomLeftCell = Cells[leftCellIndex][bottomCellIndex];
     Cell leftCell = Cells[leftCellIndex][y];
 
+    // Check if each cell is alive and add it to the count.
+    if (topLeftCell.Alive)
+        aliveCount++;
+    if (topCell.Alive)
+        aliveCount++;
+    if (topRightCell.Alive)
+        aliveCount++;
+    if (rightCell.Alive)
+        aliveCount++;
+    if (bottomRightCell.Alive)
+        aliveCount++;
+    if (bottomCell.Alive)
+        aliveCount++;
+    if (bottomLeftCell.Alive)
+        aliveCount++;
+    if (leftCell.Alive)
+        aliveCount++;
 
 
     return aliveCount;
@@ -178,7 +194,7 @@ int  HowManyLivingNeighbors(int x, int y)
 void UpdateCell(int x, int y)
 {
     // Retrieve the cell at the current position in the grid.
-    Cell cell = Cells[x][y];
+    Cell& cell = Cells[x][y];
 
     int aliveNeighbors = HowManyLivingNeighbors(x, y);
 
@@ -186,8 +202,14 @@ void UpdateCell(int x, int y)
     {
         cell.SetLife(false);
     }
-
-    ///todo figure out logic here 
+    else if (aliveNeighbors < 2)
+    {
+        cell.SetLife(false);
+    }
+    else if (aliveNeighbors == 3)
+    {
+        cell.SetLife(true);
+    }
 }
 void UpdateCells()
 {
@@ -198,20 +220,23 @@ void UpdateCells()
         {
 
             UpdateCell(xIndex, yIndex);
-
+            
         }
     }
      
 }
 
+/// <summary>
+/// Goes through each cell and draws it to the window.
+/// </summary>
+/// <returns></returns>
 void DrawShapes()
 {
-    //todo cdomment
+    // Go through every cell and draw it to the window.
     for (int i = 0; i < numCellsWide; i++)
     {
         for (int j = 0; j < numCellsHigh; j++)
         {
-
             // Draw it to the screen
             window.draw(Cells[i][j].shape);
 
