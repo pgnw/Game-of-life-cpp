@@ -162,10 +162,27 @@ int  HowManyLivingNeighbors(int x, int y)
     Cell topRightCell = Cells[rightCellIndex][upCellIndex];
     Cell rightCell = Cells[rightCellIndex][y];
     Cell bottomRightCell = Cells[rightCellIndex][bottomCellIndex];
-    Cell botttomCell = Cells[x][bottomCellIndex];
+    Cell bottomCell = Cells[x][bottomCellIndex];
     Cell bottomLeftCell = Cells[leftCellIndex][bottomCellIndex];
     Cell leftCell = Cells[leftCellIndex][y];
 
+    // Check if each cell is alive and add it to the count.
+    if (topLeftCell.Alive)
+        aliveCount++;
+    if (topCell.Alive)
+        aliveCount++;
+    if (topRightCell.Alive)
+        aliveCount++;
+    if (rightCell.Alive)
+        aliveCount++;
+    if (bottomRightCell.Alive)
+        aliveCount++;
+    if (bottomCell.Alive)
+        aliveCount++;
+    if (bottomLeftCell.Alive)
+        aliveCount++;
+    if (leftCell.Alive)
+        aliveCount++;
 
 
     return aliveCount;
