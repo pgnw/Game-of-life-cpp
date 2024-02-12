@@ -1,16 +1,3 @@
-﻿  Game of life c++.cpp
-A:\Repos\Game of life c++\Game of life c++.cpp(38,33): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-A:\Repos\Game of life c++\Game of life c++.cpp(38,27): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-A:\Repos\Game of life c++\Game of life c++.cpp(40,44): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-A:\Repos\Game of life c++\Game of life c++.cpp(40,32): warning C4244: 'argument': conversion from 'int' to 'T', possible loss of data
-          with
-          [
-              T=float
-          ]
-  Game of life c++.vcxproj -> A:\Repos\Game of life c++\x64\Debug\Game of life c++.exe
+﻿  Game of life c++.vcxproj -> A:\Repos\Game of life c++\x64\Debug\Game of life c++.exe
   'pwsh.exe' is not recognized as an internal or external command,
   operable program or batch file.

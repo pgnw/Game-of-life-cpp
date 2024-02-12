@@ -67,7 +67,7 @@ public:
         }
         else
         {
-            shape.setFillColor(Color::Red);
+            shape.setFillColor(Color::Black);
             Alive = false;
         }
    }
@@ -177,8 +177,9 @@ int  HowManyLivingNeighbors(int x, int y)
 /// </summary>
 void UpdateCell(int x, int y)
 {
+
     // Retrieve the cell at the current position in the grid.
-    Cell cell = Cells[x][y];
+    Cell& cell = Cells[x][y];
 
     int aliveNeighbors = HowManyLivingNeighbors(x, y);
 
@@ -186,8 +187,14 @@ void UpdateCell(int x, int y)
     {
         cell.SetLife(false);
     }
-
-    ///todo figure out logic here 
+    else if (aliveNeighbors < 2)
+    {
+        cell.SetLife(false);
+    }
+    else if (aliveNeighbors == 3)
+    {
+        cell.SetLife(true);
+    }
 }
 void UpdateCells()
 {
@@ -198,7 +205,7 @@ void UpdateCells()
         {
 
             UpdateCell(xIndex, yIndex);
-
+            
         }
     }
      
