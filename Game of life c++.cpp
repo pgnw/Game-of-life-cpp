@@ -47,16 +47,15 @@ public:
 
         if (randomNum <= 1)
         {
-            Alive = true;
-            shape.setFillColor(Color::White);
+            SetLife(true);
         }
         else
         {
-            Alive = false;
-            shape.setFillColor(Color::Black);
+            SetLife(false);
         }
 
     }
+
 
    void SetLife(bool life)
    {
@@ -89,7 +88,10 @@ int cellWidth;
 int numCellsWide;
 int numCellsHigh;
 
+// Vector containing the cells shown on screen. 
 std::vector<std::vector<Cell>> Cells;
+// Cells being updated are updated inside here before being transfered to the Cells vector, to ensure the rules are played out correctly.
+std::vector<std::vector<Cell>> CellsBuffer;
 
 /// <summary>
 /// Performs configuration for the window and the cells.
@@ -110,6 +112,8 @@ void ConfigSetup()
     // Create a vector to store the cells, with its capacity set to the amount of cells being simulated.
 
     Cells = std::vector<std::vector<Cell>>(numCellsWide, std::vector<Cell>(numCellsHigh));
+
+    CellsBuffer = std::vector<std::vector<Cell>>(numCellsWide, std::vector<Cell>(numCellsHigh));
 }
 
 /// <summary>
@@ -193,8 +197,10 @@ int  HowManyLivingNeighbors(int x, int y)
 /// </summary>
 void UpdateCell(int x, int y)
 {
+
     // Retrieve the cell at the current position in the grid.
-    Cell& cell = Cells[x][y];
+    // The cell is retreived from the buffer so changing the life state of this cell does not affect the others being updated this tick.
+    Cell& cell = CellsBuffer[x][y];
 
     int aliveNeighbors = HowManyLivingNeighbors(x, y);
 
@@ -213,7 +219,17 @@ void UpdateCell(int x, int y)
 }
 void UpdateCells()
 {
-    // Iterate through each cell in the 2d vector and ...
+
+    // Copy each cell from Cells to the buffer.
+    for (int xIndex = 0; xIndex < numCellsWide; xIndex++)
+    {
+        for (int yIndex = 0; yIndex < numCellsHigh; yIndex++)
+        {
+            CellsBuffer[xIndex][yIndex] = Cells[xIndex][yIndex];
+        }
+    }
+
+    // Iterate through each cell in the 2d vector and update them.
     for (int xIndex = 0; xIndex < numCellsWide; xIndex++)
     {
         for (int yIndex = 0; yIndex < numCellsHigh; yIndex++)
@@ -223,7 +239,15 @@ void UpdateCells()
             
         }
     }
-     
+    
+    // After the cells in the buffer are updated tranfer it back to the main vector "Cells"
+    for (int xIndex = 0; xIndex < numCellsWide; xIndex++)
+    {
+        for (int yIndex = 0; yIndex < numCellsHigh; yIndex++)
+        {
+            Cells[xIndex][yIndex] = CellsBuffer[xIndex][yIndex];
+        }
+    }
 }
 
 /// <summary>
@@ -238,9 +262,7 @@ void DrawShapes()
         for (int j = 0; j < numCellsHigh; j++)
         {
             // Draw it to the screen
-            window.draw(Cells[i][j].shape);
-
-            
+            window.draw(Cells[i][j].shape);            
         }
     }
 }
@@ -303,7 +325,7 @@ int main()
         // Get the time difference in milliseconds.
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTick);
 
-        if (duration >= std::chrono::milliseconds(500))
+        if (duration >= std::chrono::milliseconds(100))
         {
             window.clear(Color::Red);
             UpdateCells();
