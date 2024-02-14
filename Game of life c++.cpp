@@ -45,7 +45,7 @@ public:
 
         int randomNum = randomNumber(rng);
 
-        if (randomNum <= 1)
+        if (randomNum <= 2)
         {
             SetLife(true);
         }
@@ -92,6 +92,9 @@ int numCellsHigh;
 std::vector<std::vector<Cell>> Cells;
 // Cells being updated are updated inside here before being transfered to the Cells vector, to ensure the rules are played out correctly.
 std::vector<std::vector<Cell>> CellsBuffer;
+
+// Used to pause the simulation.
+bool isPaused = false;
 
 /// <summary>
 /// Performs configuration for the window and the cells.
@@ -197,7 +200,6 @@ int  HowManyLivingNeighbors(int x, int y)
 /// </summary>
 void UpdateCell(int x, int y)
 {
-
     // Retrieve the cell at the current position in the grid.
     // The cell is retreived from the buffer so changing the life state of this cell does not affect the others being updated this tick.
     Cell& cell = CellsBuffer[x][y];
@@ -217,8 +219,12 @@ void UpdateCell(int x, int y)
         cell.SetLife(true);
     }
 }
+
 void UpdateCells()
 {
+    // If the pause is enabled stop the function.
+    if (isPaused)
+        return;
 
     // Copy each cell from Cells to the buffer.
     for (int xIndex = 0; xIndex < numCellsWide; xIndex++)
@@ -249,6 +255,15 @@ void UpdateCells()
         }
     }
 }
+
+/// <summary>
+/// Toggles whether or not the simulation is running.
+/// </summary>
+void Pause()
+{
+    isPaused = !isPaused;
+}
+
 
 /// <summary>
 /// Goes through each cell and draws it to the window.
@@ -287,8 +302,7 @@ int main()
 
     while (window.isOpen())
     {
-
-        
+                
         // Check if the window has focus then, check if the space key was pressed.
         if (window.hasFocus())
             isSpacePressed = Keyboard::isKeyPressed(Keyboard::Space);
@@ -308,6 +322,14 @@ int main()
                 case Event::MouseButtonReleased:
                     isMouseHeld = false;
                     break;
+
+                case Event::KeyPressed:
+                    if (event.key.code == sf::Keyboard::Space)
+                    {
+                        Pause();
+                    }
+                    break;
+
 
 
                 default:
