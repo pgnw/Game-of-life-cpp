@@ -261,6 +261,7 @@ void UpdateCells()
 /// </summary>
 void Pause()
 {
+    // Might add more code here in the future
     isPaused = !isPaused;
 }
 
