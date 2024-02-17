@@ -27,17 +27,16 @@ public:
         shape.setFillColor(Color::Red);
     }
 
-    Cell(int xLoc, int yLoc, int cellHeight, int cellWidth)
+    Cell(int xLoc, int yLoc, int cellSize, int cellSize)
     {
         LocationX = xLoc;
         LocationY = yLoc;
 
         shape = RectangleShape();
 
-
         shape.setPosition(xLoc, yLoc);
 
-        shape.setSize(Vector2f(cellHeight, cellWidth));
+        shape.setSize(Vector2f(cellSize, cellSize));
 
         std::random_device dev;
         std::mt19937 rng(dev());
@@ -81,8 +80,8 @@ unsigned int screenWidth = VideoMode::getDesktopMode().width;
 unsigned int screenHeight = VideoMode::getDesktopMode().height;
 
 // Size of the cells in pixels
-int cellHeight;
-int cellWidth;
+int cellSize;
+int cellSize;
 
 // How many cells can fit into the screen.
 int numCellsWide;
@@ -105,12 +104,11 @@ void ConfigSetup()
     window.setFramerateLimit(60);
 
     // Set the size of the cells.
-    cellHeight = 10;
-    cellWidth = 10;
+    cellSize = 10;
 
     // Calculate how many cells can fit into the screen.
-    numCellsWide = screenWidth / cellHeight;
-    numCellsHigh = screenHeight / cellWidth;
+    numCellsWide = screenWidth / cellSize;
+    numCellsHigh = screenHeight / cellSize;
 
     // Create a vector to store the cells, with its capacity set to the amount of cells being simulated.
 
@@ -133,11 +131,11 @@ void GenerateCells()
         {
 
             // Get the positions to place the cells.
-            int xPos = i * cellHeight;
-            int yPos = j * cellWidth;
+            int xPos = i * cellSize;
+            int yPos = j * cellSize;
 
 
-            Cell newCell = Cell(xPos, yPos, cellHeight, cellWidth);
+            Cell newCell = Cell(xPos, yPos, cellSize, cellSize);
 
             // Draw it to the screen (might move this later).
             window.draw(newCell.shape);
@@ -293,6 +291,10 @@ int main()
 
     bool isSpacePressed;
 
+    sf::Vector2i mousePos ;
+
+    sf::Vector2i cellMousePos;
+
     Font font;
     if (!font.loadFromFile("arial.ttf"))
     {
@@ -308,6 +310,8 @@ int main()
         if (window.hasFocus())
             isSpacePressed = Keyboard::isKeyPressed(Keyboard::Space);
 
+
+
         while (window.pollEvent(event))
         {
             switch (event.type)
@@ -317,11 +321,10 @@ int main()
                     break;
 
                 case Event::MouseButtonPressed:
-                    isMouseHeld = true;
-                    break;
-
-                case Event::MouseButtonReleased:
-                    isMouseHeld = false;
+                    // Get the mouse position relative to the window.
+                    mousePos  = sf::Mouse::getPosition(window);
+                    // Divide by cell size to get the coordinates of the cell at the mouse location
+                    cellMousePos = mousePos / cellSize;
                     break;
 
                 case Event::KeyPressed:
