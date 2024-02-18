@@ -12,7 +12,7 @@ class Cell {
 private:
 
 
-
+    bool alive;
 
 public:
 
@@ -20,24 +20,27 @@ public:
     int LocationY;
 
     RectangleShape shape;
-    bool Alive;
+
+    bool IsAlive()
+    {
+        return alive;
+    }
 
     // Added this default constructor to stop the compiler from complaining, shouldn't be used.
-    Cell() : LocationX(0), LocationY(0), Alive(false), shape(Vector2f(99999, 99999)) {
+    Cell() : LocationX(0), LocationY(0), alive(false), shape(Vector2f(99999, 99999)) {
         shape.setFillColor(Color::Red);
     }
 
-    Cell(int xLoc, int yLoc, int cellHeight, int cellWidth)
+    Cell(int xLoc, int yLoc, int cellSize)
     {
         LocationX = xLoc;
         LocationY = yLoc;
 
         shape = RectangleShape();
 
-
         shape.setPosition(xLoc, yLoc);
 
-        shape.setSize(Vector2f(cellHeight, cellWidth));
+        shape.setSize(Vector2f(cellSize, cellSize));
 
         std::random_device dev;
         std::mt19937 rng(dev());
@@ -62,12 +65,12 @@ public:
         if (life)
         {
             shape.setFillColor(Color::White);
-            Alive = true;
+            alive = true;
         }
         else
         {
             shape.setFillColor(Color::Black);
-            Alive = false;
+            alive = false;
         }
    }
 
@@ -81,8 +84,7 @@ unsigned int screenWidth = VideoMode::getDesktopMode().width;
 unsigned int screenHeight = VideoMode::getDesktopMode().height;
 
 // Size of the cells in pixels
-int cellHeight;
-int cellWidth;
+int cellSize;
 
 // How many cells can fit into the screen.
 int numCellsWide;
@@ -105,12 +107,11 @@ void ConfigSetup()
     window.setFramerateLimit(60);
 
     // Set the size of the cells.
-    cellHeight = 10;
-    cellWidth = 10;
+    cellSize = 10;
 
     // Calculate how many cells can fit into the screen.
-    numCellsWide = screenWidth / cellHeight;
-    numCellsHigh = screenHeight / cellWidth;
+    numCellsWide = screenWidth / cellSize;
+    numCellsHigh = screenHeight / cellSize;
 
     // Create a vector to store the cells, with its capacity set to the amount of cells being simulated.
 
@@ -133,11 +134,10 @@ void GenerateCells()
         {
 
             // Get the positions to place the cells.
-            int xPos = i * cellHeight;
-            int yPos = j * cellWidth;
+            int xPos = i * cellSize;
+            int yPos = j * cellSize;
 
-
-            Cell newCell = Cell(xPos, yPos, cellHeight, cellWidth);
+            Cell newCell = Cell(xPos, yPos, cellSize);
 
             // Draw it to the screen (might move this later).
             window.draw(newCell.shape);
@@ -173,21 +173,21 @@ int  HowManyLivingNeighbors(int x, int y)
     Cell leftCell = Cells[leftCellIndex][y];
 
     // Check if each cell is alive and add it to the count.
-    if (topLeftCell.Alive)
+    if (topLeftCell.IsAlive())
         aliveCount++;
-    if (topCell.Alive)
+    if (topCell.IsAlive())
         aliveCount++;
-    if (topRightCell.Alive)
+    if (topRightCell.IsAlive())
         aliveCount++;
-    if (rightCell.Alive)
+    if (rightCell.IsAlive())
         aliveCount++;
-    if (bottomRightCell.Alive)
+    if (bottomRightCell.IsAlive())
         aliveCount++;
-    if (bottomCell.Alive)
+    if (bottomCell.IsAlive())
         aliveCount++;
-    if (bottomLeftCell.Alive)
+    if (bottomLeftCell.IsAlive())
         aliveCount++;
-    if (leftCell.Alive)
+    if (leftCell.IsAlive())
         aliveCount++;
 
 
@@ -261,6 +261,7 @@ void UpdateCells()
 /// </summary>
 void Pause()
 {
+    // Might add more code here in the future
     isPaused = !isPaused;
 }
 
@@ -288,9 +289,17 @@ int main()
 
     Event event;
 
-    bool isMouseHeld = false;
-
     bool isSpacePressed;
+
+    // Mouse position relative to the window.
+    sf::Vector2i mousePos ;
+    // Coordinates of the cell at the mouse location.
+    sf::Vector2i cellMousePos;
+    // Selected cell for user actions.
+    // Using a pointer instead of a reference so the compiler doesn't complain about it not being initialized.
+    Cell* selectedCell;
+    // Same as above for this one holds a pointer to the selected cell in the buffer.
+    Cell* selectedCellBuffer;
 
     Font font;
     if (!font.loadFromFile("arial.ttf"))
@@ -307,6 +316,7 @@ int main()
         if (window.hasFocus())
             isSpacePressed = Keyboard::isKeyPressed(Keyboard::Space);
 
+
         while (window.pollEvent(event))
         {
             switch (event.type)
@@ -315,12 +325,24 @@ int main()
                     window.close();
                     break;
 
+                    // This event allows the user to click on cells to toggle their life states.
                 case Event::MouseButtonPressed:
-                    isMouseHeld = true;
-                    break;
+                    // Get the mouse position relative to the window.
+                    mousePos  = sf::Mouse::getPosition(window);
+                    // Get the coordinates of the cell at the mouse location, this value is also its index in the vector.
+                    cellMousePos = mousePos / cellSize;
 
-                case Event::MouseButtonReleased:
-                    isMouseHeld = false;
+                    selectedCell = &Cells[cellMousePos.x][cellMousePos.y];
+                    selectedCellBuffer = &CellsBuffer[cellMousePos.x][cellMousePos.y];
+
+                    if (selectedCell == nullptr)
+                        break;
+                    
+                    // Toggle the cells lifestate.
+                    selectedCell->SetLife(!selectedCell->IsAlive());
+                    selectedCellBuffer->SetLife(!selectedCellBuffer->IsAlive());
+
+
                     break;
 
                 case Event::KeyPressed:
