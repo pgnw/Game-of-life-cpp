@@ -341,7 +341,7 @@ int main()
                     // Toggle the cells lifestate.
                     selectedCell->SetLife(!selectedCell->IsAlive());
                     selectedCellBuffer->SetLife(!selectedCellBuffer->IsAlive());
-
+                    DrawShapes();
 
                     break;
 
