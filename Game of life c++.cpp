@@ -98,6 +98,9 @@ std::vector<std::vector<Cell>> CellsBuffer;
 // Used to pause the simulation.
 bool isPaused = false;
 
+// This is used to prevent the program from updating the same cell repeatly when the left mouse button is held down.
+sf::Vector2i lastUpdatedCellPos;
+
 /// <summary>
 /// Performs configuration for the window and the cells.
 /// </summary>
@@ -282,6 +285,39 @@ void DrawShapes()
         }
     }
 }
+
+/// <summary>
+/// Used to to toggle the lifestate of cell located under the mouse.
+/// </summary>
+void toggleCellLifeStateUnderMouse()
+{
+    // Get the mouse position relative to the window.
+   sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+
+   // Prevent the same cell from being updating twice untill the mouse is moved to another cell.
+   if (mousePos == lastUpdatedCellPos)
+       return;
+
+   lastUpdatedCellPos = mousePos;
+
+   // Get the coordinates of the cell at the mouse location, this value is also its index in the vector.
+   auto cellMousePos = mousePos / cellSize;
+
+   auto selectedCell = &Cells[cellMousePos.x][cellMousePos.y];
+   auto selectedCellBuffer = &CellsBuffer[cellMousePos.x][cellMousePos.y];
+
+   if (selectedCell == nullptr)
+       return;
+
+    // Toggle the cells lifestate.
+    selectedCell->SetLife(!selectedCell->IsAlive());
+    selectedCellBuffer->SetLife(!selectedCellBuffer->IsAlive());
+
+    // Update the screen
+    DrawShapes();
+    window.display();
+}
+
 int main()
 {
     ConfigSetup();
@@ -289,17 +325,22 @@ int main()
 
     Event event;
 
-    bool isSpacePressed;
+    bool isSpacePressed = false;
+    bool isLeftMouseButtonHeld = false;
+
 
     // Mouse position relative to the window.
     sf::Vector2i mousePos ;
     // Coordinates of the cell at the mouse location.
     sf::Vector2i cellMousePos;
+
+
     // Selected cell for user actions.
     // Using a pointer instead of a reference so the compiler doesn't complain about it not being initialized.
     Cell* selectedCell;
     // Same as above for this one holds a pointer to the selected cell in the buffer.
     Cell* selectedCellBuffer;
+
 
     Font font;
     if (!font.loadFromFile("arial.ttf"))
@@ -325,24 +366,13 @@ int main()
                     window.close();
                     break;
 
-                    // This event allows the user to click on cells to toggle their life states.
+                    // This allows the user to click and hold to toggle cell life states.
                 case Event::MouseButtonPressed:
-                    // Get the mouse position relative to the window.
-                    mousePos  = sf::Mouse::getPosition(window);
-                    // Get the coordinates of the cell at the mouse location, this value is also its index in the vector.
-                    cellMousePos = mousePos / cellSize;
+                    isLeftMouseButtonHeld = true;
+                    break;
 
-                    selectedCell = &Cells[cellMousePos.x][cellMousePos.y];
-                    selectedCellBuffer = &CellsBuffer[cellMousePos.x][cellMousePos.y];
-
-                    if (selectedCell == nullptr)
-                        break;
-                    
-                    // Toggle the cells lifestate.
-                    selectedCell->SetLife(!selectedCell->IsAlive());
-                    selectedCellBuffer->SetLife(!selectedCellBuffer->IsAlive());
-                    DrawShapes();
-
+                case Event::MouseButtonReleased:
+                    isLeftMouseButtonHeld = false;
                     break;
 
                 case Event::KeyPressed:
@@ -368,6 +398,10 @@ int main()
 
         // Get the time difference in milliseconds.
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTick);
+        
+        // Allow the user to click on cells to toggle their lifestate.
+        if (isLeftMouseButtonHeld)
+            toggleCellLifeStateUnderMouse();
 
         if (duration >= std::chrono::milliseconds(100))
         {
