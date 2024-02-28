@@ -48,7 +48,7 @@ public:
 
         int randomNum = randomNumber(rng);
 
-        if (randomNum <= 2)
+        if (randomNum <= -1)
         {
             SetLife(true);
         }
@@ -286,6 +286,9 @@ void DrawShapes()
     }
 }
 
+// Used to hold the last cell position hovered over by the mouse.
+sf::Vector2i cellMousePos;
+
 /// <summary>
 /// Used to to toggle the lifestate of cell located under the mouse.
 /// </summary>
@@ -294,8 +297,8 @@ void toggleCellLifeStateUnderMouse()
     // Get the mouse position relative to the window.
    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 
-   // Get the coordinates of the cell at the mouse location, this value is also its index in the vector.
-   auto cellMousePos = mousePos / cellSize;
+   // Get the coordinates of the cell at the mouse location, this value is also its index in the Cells vector.
+   cellMousePos = mousePos / cellSize;
 
    // Prevent the same cell from being updating twice untill the mouse is moved to another cell.
    if (cellMousePos == lastUpdatedCellPos)
@@ -330,10 +333,6 @@ int main()
     bool isLeftMouseButtonHeld = false;
 
 
-    // Mouse position relative to the window.
-    sf::Vector2i mousePos ;
-    // Coordinates of the cell at the mouse location.
-    sf::Vector2i cellMousePos;
 
 
     // Selected cell for user actions.
@@ -383,7 +382,10 @@ int main()
                     }
                     break;
 
+                case Event::MouseMoved:
+                    cellMousePos = sf::Mouse::getPosition(window) / cellSize;
 
+                    break;
 
                 default:
                     break;
