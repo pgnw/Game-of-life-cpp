@@ -294,18 +294,12 @@ sf::Vector2i cellMousePos;
 /// </summary>
 void toggleCellLifeStateUnderMouse()
 {
-    // Get the mouse position relative to the window.
-   sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+    // Get the position of the cell located under the mouse.
+    cellMousePos = sf::Mouse::getPosition(window) / cellSize;
 
-   // Get the coordinates of the cell at the mouse location, this value is also its index in the Cells vector.
-   cellMousePos = mousePos / cellSize;
-
-   // Prevent the same cell from being updating twice untill the mouse is moved to another cell.
-   if (cellMousePos == lastUpdatedCellPos)
-       return;
-
-   lastUpdatedCellPos = cellMousePos;
-
+   // Prevent the same cell from being updating twice until the mouse is moved to another cell.
+    if (cellMousePos == lastUpdatedCellPos)
+        return;
 
    auto selectedCell = &Cells[cellMousePos.x][cellMousePos.y];
    auto selectedCellBuffer = &CellsBuffer[cellMousePos.x][cellMousePos.y];
@@ -357,7 +351,6 @@ int main()
         if (window.hasFocus())
             isSpacePressed = Keyboard::isKeyPressed(Keyboard::Space);
 
-
         while (window.pollEvent(event))
         {
             switch (event.type)
@@ -383,7 +376,7 @@ int main()
                     break;
 
                 case Event::MouseMoved:
-                    cellMousePos = sf::Mouse::getPosition(window) / cellSize;
+                    lastUpdatedCellPos = sf::Mouse::getPosition(window) / cellSize;
 
                     break;
 
