@@ -4,6 +4,6 @@ This project is an implementation of Conway's Game of Life using the SFML (Simpl
 
 Features
 
-    Interactive Visualization: View the simulation in real-time with graphical rendering using the SFML library.
-    Manual Cell State Changes: Use the mouse to toggle the life state of individual cells.
-    Pause and Resume: Control the simulation flow with the spacebar to pause and resume the game.
+   >Interactive Visualization: View the simulation in real-time with graphical rendering using the SFML library.
+   >Manual Cell State Changes: Use the mouse to toggle the life state of individual cells.
+   >Pause and Resume: Control the simulation flow with the spacebar to pause and resume the game.
